@@ -9,7 +9,7 @@
     "predev": "npm run clean",
     "dev": "npm-run-all --parallel dev:*",
     "dev:client": "vite --config vite.config.js",
-    "dev:server": "nodemon server/server.js --ext js,liquid",
+    "dev:server": "node server/server.js --ext js,liquid",
     "prebuild": "npm run clean",
     "build": "npm-run-all build:*",
     "build:client": "vite build"

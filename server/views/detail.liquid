@@ -1,6 +1,36 @@
 {% layout "server/layouts/base.liquid" %}
 
 {% block content %}
-<h1 class="h1">{{ item.name }}</h1>
-<img src="{{ item.image.src }}" alt="{{ item.image.alt }}" width="{{ item.image.width }}" height="{{ item.image.height }}" />
+<main>
+  <section>
+   <div class="titel">
+      <h1><strong> {{ teamData.strTeam }} </strong></h1>
+      <img src="{{ team.strBadge }}" id="badge">
+   </div>
+
+    <ul>
+      <li>Badge Team1 vs team2 Badge</li>
+      <li>Badge Team1 vs team2 Badge</li>
+      <li>Badge Team1 vs team2 Badge</li>
+      <li>Badge Team1 vs team2 Badge</li>
+      <li>Badge Team1 vs team2 Badge</li>
+    </ul>
+
+  </section>
+  
+  <section>
+   <div class="titel">
+      <h1><strong>Zoekbalk</strong></h1>
+      <img src="{{ team.strBadge }}" id="badge">
+   </div>
+
+    <ul>
+      <li>Badge Team1 vs team2 Badge</li>
+      <li>Badge Team1 vs team2 Badge</li>
+      <li>Badge Team1 vs team2 Badge</li>
+      <li>Badge Team1 vs team2 Badge</li>
+      <li>Badge Team1 vs team2 Badge</li>
+    </ul>
+
+  </section>
 {% endblock %}

@@ -1,5 +1,11 @@
 header {
   padding: 1rem;
+  background-color: red;
+}
+
+img {
+  height: 2em;
+  width: 2em;
 }
 
 footer {

@@ -5,10 +5,20 @@
 <h1 class="h1">{{ title }}</h1>
 
 <ul class="grid">
-  {% for item in items %}
+  {% for team in eredivisieData.teams %}
     <li>
-      <a href="/plant/{{ item.id }}">
-        {% render 'server/components/card/card.liquid', item: item %}
+      <a href="/team/{{ team.strTeam | replace: " ", "_"   }}">
+       <img src="{{ team.strBadge }}">
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+
+<ul clas="grid">
+  {% for team in BplData.teams %}
+    <li>
+      <a href="/team/{{ team.strTeam | replace: " ", "_"   }}">
+      <img src="{{ team.strBadge }}">
       </a>
     </li>
   {% endfor %}

@@ -4,7 +4,9 @@ const __dirname = import.meta.dirname;
 
 // https://vitejs.dev/config/
 export default defineConfig({
+
   build: {
+    publicDir: 'client',
     minify: false,
     emptyOutDir: false,
     outDir: 'dist',

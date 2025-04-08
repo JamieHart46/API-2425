@@ -4,29 +4,6 @@ import { logger } from '@tinyhttp/logger';
 import { Liquid } from 'liquidjs';
 import sirv from 'sirv';
 
-const data = {
-  'beemdkroon': {
-    id: 'beemdkroon',
-    name: 'Beemdkroon',
-    image: {
-      src: 'https://i.pinimg.com/736x/09/0a/9c/090a9c238e1c290bb580a4ebe265134d.jpg',
-      alt: 'Beemdkroon',
-      width: 695,
-      height: 1080,
-    }
-  },
-  'wilde-peen': {
-    id: 'wilde-peen',
-    name: 'Wilde Peen',
-    image: {
-      src: 'https://mens-en-gezondheid.infonu.nl/artikel-fotos/tom008/4251914036.jpg',
-      alt: 'Wilde Peen',
-      width: 418,
-      height: 600,
-    }
-  }
-}
-
 const engine = new Liquid({
   extname: '.liquid',
 });
@@ -35,20 +12,29 @@ const app = new App();
 
 app
   .use(logger())
-  .use('/', sirv('dist'))
+  .use('/', sirv(process.env.NODE_ENV === 'development' ? 'client' : 'dist'))
   .listen(3000, () => console.log('Server available on http://localhost:3000'));
 
 app.get('/', async (req, res) => {
-  return res.send(renderTemplate('server/views/index.liquid', { title: 'Home', items: Object.values(data) }));
+  const eredivisie = await fetch('https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=Dutch%20Eredivisie')
+  const eredivisieData = await eredivisie.json()
+
+  const Bpl = await fetch('https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=English%20Premier%20League')
+  const BplData = await Bpl.json()
+
+  return res.send(renderTemplate('server/views/index.liquid', { title: 'Competities', eredivisieData: eredivisieData, BplData: BplData }));
+  // return res.send(renderTemplate('server/views/index.liquid', { title: 'Premier league', BplData: BplData }));
 });
 
-app.get('/plant/:id/', async (req, res) => {
-  const id = req.params.id;
-  const item = data[id];
-  if (!item) {
-    return res.status(404).send('Not found');
-  }
-  return res.send(renderTemplate('server/views/detail.liquid', { title: `Detail page for ${id}`, item }));
+app.get('/team/:strTeam/', async (req, res) => {
+  const teamName = req.params.strTeam;
+  const team = await fetch('https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=' + teamName)
+ 
+  const teamData = await team.json()
+  const actualTeamData = teamData.teams[0]
+  
+  
+  return res.send(renderTemplate('server/views/detail.liquid', { title: `Team page for ${teamData.strTeam}`, teamData: actualTeamData}));
 });
 
 const renderTemplate = (template, data) => {
@@ -59,4 +45,34 @@ const renderTemplate = (template, data) => {
 
   return engine.renderFileSync(template, templateData);
 };
+
+
+// const myHeaders = new Headers();
+// myHeaders.append("Accept", "application/JSON");
+
+// const requestOptions = {
+//   method: "GET",
+//   headers: myHeaders, 
+//   redirect: "follow"
+// };
+
+// fetch("https://www.thesportsdb.com//api/v1/json/3/search_all_teams.php?l=Dutch%20Eredivisie", requestOptions)
+//  .then((response) => response.json())
+ 
+//  .then((result) =>
+//   console.log(result.teams[0].strTeam))
+
+//  .catch((error) => console.error(error));
+
+ // const teamInfo = await fetch("https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=Manchester_United")
+
+ 
+//  Token code
+//  CLZ3Pk9BmtmynH7l7b7x4bWuarw7cJ3O2ptuU1DQvfH3uvxHYyuARaPNwepO
+
+// https://www.thesportsdb.com/free_sports_api
+//https:www.thesportsdb.com/api/v1/json/3/searchteams.php?t=Manchester_United
+
+// Livescores
+// https://www.football-data.org/coverage
 
